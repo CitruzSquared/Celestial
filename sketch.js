@@ -80,7 +80,7 @@ function setup() {
 
     sizelabel = createElement("h5", "Size");
     sizelabel.position(windowWidth - 235, 490);
-    sizeslider = createSlider(10, 60, 10, 5);
+    sizeslider = createSlider(10, 70, 40, 6);
     sizeslider.position(windowWidth - 185, 510);
 }
 
@@ -106,7 +106,7 @@ let celestialRadius = 1000;
 let starList = [];
 let latitude = 35;
 let tilt = 23;
-let size = 10;
+let size = 40;
 
 let siderealTime;
 
