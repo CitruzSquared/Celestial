@@ -174,7 +174,7 @@ function setup() {
 
     sizelabel = createElement("h5", "Size");
     sizelabel.position(windowWidth - 235, 480);
-    sizeslider = createSlider(10, 60, 10, 5);
+    sizeslider = createSlider(10, 60, 20, 5);
     sizeslider.position(windowWidth - 185, 500);
 
     magnlabel = createElement("h5", "Limiting Magnitude");
@@ -319,7 +319,7 @@ function draw() {
         rotateX(90);
 
 
-        stroke(30, 100, 100);
+        stroke(45, 100, 100);
         strokeWeight(40);
         point(celestialRadius * cos(sunEclipticPosition), 0, celestialRadius * sin(sunEclipticPosition));
         planetA.drawPlanet();
