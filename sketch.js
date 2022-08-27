@@ -5,7 +5,7 @@ function setup() {
 let angle = 0;
 let starList;
 function preload() {
-    starList = loadStrings("stars/starList.txt");
+    starList = loadStrings("starList.txt");
 }
 function draw() {
     background(0);
