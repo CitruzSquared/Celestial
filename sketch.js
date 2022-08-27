@@ -85,9 +85,9 @@ class Star {
         }
         if (this.magnitude < magn) {
             strokeWeight(size * sqrt(pow(pow(100, 0.2), -this.magnitude)));
-            let x = celestialRadius * sin(180 + this.rightAscension) * cos(this.declination);
+            let x = celestialRadius * sin(this.rightAscension) * cos(this.declination);
             let y = -celestialRadius * sin(this.declination);
-            let z = -celestialRadius * cos(180 + this.rightAscension) * cos(this.declination);
+            let z = -celestialRadius * cos(this.rightAscension) * cos(this.declination);
             point(x, y, z);
         }
     }
