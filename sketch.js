@@ -199,7 +199,7 @@ var sizelabel, sizeslider;
 var magnlabel, magnslider;
 
 let time = 0.5;
-let year = 365;
+let year = 298;
 let realtime = 360 / (3600 * 24);
 let angle = 0;
 let celestialRadius = 1000;
