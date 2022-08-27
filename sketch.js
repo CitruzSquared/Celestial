@@ -101,14 +101,12 @@ function setup() {
     createCanvas(windowWidth * 4 / 5, windowHeight, WEBGL);
     angleMode(DEGREES);
     colorMode(HSB, 360, 100, 100, 100);
-    console.log(starListtext.length);
     for (let i = 0; i < starListtext.length; i++) {
         let values = split(starListtext[i], " ");
         let star = new Star(values[0], values[1], values[2]);
         starList.push(star);
         star.drawStar();
     }
-    console.log(starList.length);
     camera = createCamera();
 
     fovlabel = createElement("h5", "FOV Level");
