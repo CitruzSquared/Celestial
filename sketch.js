@@ -83,11 +83,13 @@ class Star {
                 stroke(240, 100, 100);
                 break;
         }
-        strokeWeight(size * sqrt(pow(pow(100, 0.2), -this.magnitude)));
-        let x = celestialRadius * sin(180 + this.rightAscension) * cos(this.declination);
-        let y = -celestialRadius * sin(this.declination);
-        let z = -celestialRadius * cos(180 + this.rightAscension) * cos(this.declination);
-        point(x, y, z);
+        if (this.magnitude < magn) {
+            strokeWeight(size * sqrt(pow(pow(100, 0.2), -this.magnitude)));
+            let x = celestialRadius * sin(180 + this.rightAscension) * cos(this.declination);
+            let y = -celestialRadius * sin(this.declination);
+            let z = -celestialRadius * cos(180 + this.rightAscension) * cos(this.declination);
+            point(x, y, z);
+        }
     }
 }
 function setup() {
@@ -134,46 +136,51 @@ function setup() {
     Em.position(windowWidth - 235, 270);
 
     latinput = createInput();
-    latinput.position(windowWidth - 235, 330);
+    latinput.position(windowWidth - 235, 320);
     latinput.size(80);
     latbutton = createButton("Enter Latitude");
-    latbutton.position(latinput.x + latinput.width, 330);
+    latbutton.position(latinput.x + latinput.width, 320);
     latbutton.mousePressed(updateLatitude);
 
     tiltinput = createInput();
-    tiltinput.position(windowWidth - 235, 350);
+    tiltinput.position(windowWidth - 235, 340);
     tiltinput.size(80);
     tiltbutton = createButton("Enter Axial Tilt");
-    tiltbutton.position(tiltinput.x + tiltinput.width, 350);
+    tiltbutton.position(tiltinput.x + tiltinput.width, 340);
     tiltbutton.mousePressed(updateTilt);
 
     timeinput = createInput();
-    timeinput.position(windowWidth - 235, 370);
+    timeinput.position(windowWidth - 235, 360);
     timeinput.size(80);
     timebutton = createButton("Enter Time (days)");
-    timebutton.position(timeinput.x + timeinput.width, 370);
+    timebutton.position(timeinput.x + timeinput.width, 360);
     timebutton.mousePressed(updateTime);
 
     yearinput = createInput();
-    yearinput.position(windowWidth - 235, 390);
+    yearinput.position(windowWidth - 235, 380);
     yearinput.size(80);
     yearbutton = createButton("Days in a year");
-    yearbutton.position(yearinput.x + yearinput.width, 390);
+    yearbutton.position(yearinput.x + yearinput.width, 380);
     yearbutton.mousePressed(updateYear);
 
     latnum = createElement("h5", "Latitude: 30˚");
-    latnum.position(windowWidth - 235, 410);
+    latnum.position(windowWidth - 235, 400);
     tiltnum = createElement("h5", "Axial Tilt: 23˚");
-    tiltnum.position(windowWidth - 235, 430);
+    tiltnum.position(windowWidth - 235, 420);
     timenum = createElement("h5", "Time: 0.5 days");
-    timenum.position(windowWidth - 235, 450);
-    yearnum = createElement("h5", "Year Length: 365 days");
-    yearnum.position(windowWidth - 235, 470);
+    timenum.position(windowWidth - 235, 440);
+    yearnum = createElement("h5", "Year Length: 298 days");
+    yearnum.position(windowWidth - 235, 460);
 
     sizelabel = createElement("h5", "Size");
-    sizelabel.position(windowWidth - 235, 490);
-    sizeslider = createSlider(10, 70, 30, 6);
-    sizeslider.position(windowWidth - 185, 510);
+    sizelabel.position(windowWidth - 235, 480);
+    sizeslider = createSlider(10, 60, 10, 5);
+    sizeslider.position(windowWidth - 185, 500);
+
+    magnlabel = createElement("h5", "Limiting Magnitude");
+    magnlabel.position(windowWidth - 235, 500);
+    magnslider = createSlider(-2, 6, 4.5, 0.5);
+    magnslider.position(windowWidth - 185, 540);
 }
 
 function preload() {
@@ -189,6 +196,7 @@ var timeinput, timebutton;
 var yearinput, yearbutton;
 var latnum, tiltnum, timenum, yearnum;
 var sizelabel, sizeslider;
+var magnlabel, magnslider;
 
 let time = 0.5;
 let year = 365;
@@ -196,9 +204,10 @@ let realtime = 360 / (3600 * 24);
 let angle = 0;
 let celestialRadius = 1000;
 let starList = [];
-let latitude = 35;
-let tilt = 23;
-let size = 30;
+let latitude = 40.8;
+let tilt = 24.7;
+let size = 20;
+let magn = 4.5;
 
 let siderealTime;
 
@@ -228,7 +237,7 @@ function draw() {
     showEquatorMeridians = em.checked();
     showEcliptic = E.checked();
     showEclipticMeridians = Em.checked();
-
+    magn = magnslider.value();
     background(0);
     let fov = fovslider.value();
     fovnumber.html("FOV: " + fov + "˚");
