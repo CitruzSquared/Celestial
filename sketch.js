@@ -11,8 +11,9 @@ function preload() {
 function draw() {
     background(0);
     for (let i = 0; i < starList.length; i++) {
-        let values = split(starList[i]);
+        let values = split(starList[i], " ");
         let star = new Star(values[0], values[1], values[2]);
+        star.drawStar();
     }
 }
 
