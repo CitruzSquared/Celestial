@@ -333,7 +333,7 @@ function draw() {
         pop();
         pop();
     }
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < starList.length; i++) {
         starList[i].drawStar();
     }
     pop();  //end rotation of the earth
