@@ -54,7 +54,35 @@ class Star {
     }
 
     drawStar() {
-        stroke(map(-this.declination, -90, 90, 0, 200), 100, 100);
+        switch (floor(this.magnitude)) {
+            case -2:
+                stroke(0, 0, 100);
+                break;
+            case -1:
+                stroke(0, 50, 100);
+                break;
+            case 0:
+                stroke(0, 100, 100);
+                break;
+            case 1:
+                stroke(30, 100, 100);
+                break;
+            case 2:
+                stroke(60, 100, 100);
+                break;
+            case 3:
+                stroke(90, 100, 100);
+                break;
+            case 4:
+                stroke(180, 100, 100);
+                break;
+            case 5:
+                stroke(210, 100, 100);
+                break;
+            case 6:
+                stroke(240, 100, 100);
+                break;
+        }
         strokeWeight(size * sqrt(pow(pow(100, 0.2), -this.magnitude)));
         let x = celestialRadius * sin(180 + this.rightAscension) * cos(this.declination);
         let y = -celestialRadius * sin(this.declination);
