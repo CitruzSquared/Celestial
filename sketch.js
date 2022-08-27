@@ -1,3 +1,67 @@
+class innerPlanet {
+    constructor(period, radius, offset, h, s, b, thickness) {
+        this.period = period;
+        this.radius = radius;
+        this.offset = offset;
+        this.h = h;
+        this.s = s;
+        this.b = b;
+        this.thickness = thickness;
+    }
+
+    calculateElongation(t) {
+        let s = 360 / this.period * t + 360 / this.period * this.offset;
+        let x = atan2(R * cos(90 - sunEclipticPosition) - this.radius * cos(s - 90), R * sin(90 - sunEclipticPosition) + this.radius * sin(s - 90));
+        return x;
+    }
+
+    drawPlanet() {
+        strokeWeight(this.thickness);
+        stroke(this.h, this.s, this.b);
+        point(celestialRadius * cos(this.calculateElongation(time)), 0, celestialRadius * sin(this.calculateElongation(time)));
+    }
+}
+
+class outerPlanet {
+    constructor(period, radius, offset, h, s, b, thickness) {
+        this.period = period;
+        this.radius = radius;
+        this.offset = offset;
+        this.h = h;
+        this.s = s;
+        this.b = b;
+        this.thickness = thickness;
+    }
+
+    calculateElongation(t) {
+        let s = 360 / this.period * t + 360 / this.period * this.offset;
+        let x = atan2(R * cos(sunEclipticPosition) - this.radius * sin(s), this.radius * cos(s) - R * cos(sunEclipticPosition));
+        return (180 - x + 180) % 360 - 180;
+    }
+
+    drawPlanet() {
+        strokeWeight(this.thickness);
+        stroke(this.h, this.s, this.b);
+        point(celestialRadius * cos(this.calculateElongation(time)), 0, celestialRadius * sin(this.calculateElongation(time)));
+    }
+}
+
+class Star {
+    constructor(rightAscension, declination, magnitude) {
+        this.rightAscension = rightAscension;
+        this.declination = declination;
+        this.magnitude = magnitude;
+    }
+
+    drawStar() {
+        stroke(map(-this.declination, -90, 90, 0, 200), 100, 100);
+        strokeWeight(size * sqrt(pow(pow(100, 0.2), -this.magnitude)));
+        let x = celestialRadius * sin(180 + this.rightAscension) * cos(this.declination);
+        let y = -celestialRadius * sin(this.declination);
+        let z = -celestialRadius * cos(180 + this.rightAscension) * cos(this.declination);
+        point(x, y, z);
+    }
+}
 function setup() {
     createCanvas(windowWidth * 4 / 5, windowHeight, WEBGL);
     angleMode(DEGREES);
@@ -9,7 +73,7 @@ function setup() {
         starList.push(star);
         star.drawStar();
     }
-
+    console.log(starList.length);
     camera = createCamera();
 
     fovlabel = createElement("h5", "FOV Level");
@@ -121,7 +185,11 @@ let showEcliptic = true;
 let showEclipticMeridians = false;
 
 let sunEclipticPosition = 0
-let venusEclipticPosition = 40;
+let R = 126.096;
+let planetA = new innerPlanet(169.0587391, 86.4136, 13.15, 0, 50, 100, 30);
+let planetC = new outerPlanet(543.7880553, 188.297, -60.31, 90, 50, 100, 30);
+let planetD = new outerPlanet(2934.3, 579.286, -1366.08, 200, 50, 100, 30);
+let planetE = new outerPlanet(7716.6, 1036.74, 1654.1, 300, 50, 100, 30);
 
 function draw() {
     siderealTime = (time - 0.5) * (year + 1) / (year) - floor((time - 0.5) * (year + 1) / (year));
@@ -211,13 +279,16 @@ function draw() {
         torus(celestialRadius, 2, 40);
 
         //sun
+        rotateX(90);
+
+
         stroke(30, 100, 100);
         strokeWeight(40);
-        rotateX(90);
         point(celestialRadius * cos(sunEclipticPosition), 0, celestialRadius * sin(sunEclipticPosition));
-        stroke(50, 50, 100);
-        strokeWeight(30);
-        point(celestialRadius * cos(venusEclipticPosition), 0, celestialRadius * sin(venusEclipticPosition));
+        planetA.drawPlanet();
+        planetC.drawPlanet();
+        planetD.drawPlanet();
+        planetE.drawPlanet();
         pop();
     }
     if (showEclipticMeridians) { //ecliptic meridians
@@ -243,22 +314,6 @@ function draw() {
     sunEclipticPosition = (time % year) / year * 360;
 }
 
-class Star {
-    constructor(rightAscension, declination, magnitude) {
-        this.rightAscension = rightAscension;
-        this.declination = declination;
-        this.magnitude = magnitude;
-    }
-
-    drawStar() {
-        stroke(map(-this.declination, -90, 90, 0, 200), 100, 100);
-        strokeWeight(size * sqrt(pow(pow(100, 0.2), -this.magnitude)));
-        let x = celestialRadius * sin(180 + this.rightAscension) * cos(this.declination);
-        let y = -celestialRadius * sin(this.declination);
-        let z = -celestialRadius * cos(180 + this.rightAscension) * cos(this.declination);
-        point(x, y, z);
-    }
-}
 function updateLatitude() {
     latitude = latinput.value();
     latinput.value("");
