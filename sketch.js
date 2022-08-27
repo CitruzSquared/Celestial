@@ -7,18 +7,20 @@ class innerPlanet {
         this.s = s;
         this.b = b;
         this.thickness = thickness;
+        this.synodic = year / (1 / (this.period / year) - 1);
     }
 
     calculateElongation(t) {
-        let s = 360 / this.period * t + 360 / this.period * this.offset;
-        let x = atan2(R * cos(90 - sunEclipticPosition) - this.radius * cos(s - 90), R * sin(90 - sunEclipticPosition) + this.radius * sin(s - 90));
-        return x;
+        let n = t % this.synodic;
+        let s = 360 * n / this.period + 360 * this.offset / this.period;
+        let x = atan2(R * cos(90 - sv(n)) - this.radius * cos(s - 90), R * sin(90 - sv(n)) + this.radius * sin(s - 90));
+        return ((x - sunEclipticPosition(n)) + 180) % 360 - 180;
     }
 
     drawPlanet() {
         strokeWeight(this.thickness);
         stroke(this.h, this.s, this.b);
-        point(celestialRadius * cos(this.calculateElongation(time)), 0, celestialRadius * sin(this.calculateElongation(time)));
+        point(celestialRadius * cos(sunEclipticPosition(time) + this.calculateElongation(time)), 0, celestialRadius * sin(sunEclipticPosition(time) + this.calculateElongation(time)));
     }
 }
 
@@ -31,18 +33,21 @@ class outerPlanet {
         this.s = s;
         this.b = b;
         this.thickness = thickness;
+        this.synodic = year / -(1 / (period / year) - 1);
     }
 
     calculateElongation(t) {
-        let s = 360 / this.period * t + 360 / this.period * this.offset;
-        let x = atan2(R * cos(sunEclipticPosition) - this.radius * sin(s), this.radius * cos(s) - R * cos(sunEclipticPosition));
-        return (180 - x + 180) % 360 - 180;
+        let n = t % this.synodic;
+        let s = 360 / this.period * n + 360 / this.period * this.offset;
+        let x = atan2(R * sin(sv(n)) - this.radius * sin(s), this.radius * cos(s) - R * cos(sv(n)));
+        let y = (180 - x + 180) % 360 - 180;
+        return (y - sunEclipticPosition(n) + 180) % 360 - 180;
     }
 
     drawPlanet() {
         strokeWeight(this.thickness);
         stroke(this.h, this.s, this.b);
-        point(celestialRadius * cos(this.calculateElongation(time)), 0, celestialRadius * sin(this.calculateElongation(time)));
+        point(celestialRadius * cos(sunEclipticPosition(time) + this.calculateElongation(time)), 0, celestialRadius * sin(sunEclipticPosition(time) + this.calculateElongation(time)));
     }
 }
 
@@ -221,12 +226,11 @@ let showEquatorMeridians = false;
 let showEcliptic = true;
 let showEclipticMeridians = false;
 
-let sunEclipticPosition = 0
 let R = 126.096;
-let planetA = new innerPlanet(169.0587391, 86.4136, 13.15, 0, 50, 100, 30);
+let planetA = new innerPlanet(169.0587391, 86.4136, 13.15, 0, 50, 100, 35);
 let planetC = new outerPlanet(543.7880553, 188.297, -60.31, 90, 50, 100, 30);
-let planetD = new outerPlanet(2934.3, 579.286, -1366.08, 200, 50, 100, 30);
-let planetE = new outerPlanet(7716.6, 1036.74, 1654.1, 300, 50, 100, 30);
+let planetD = new outerPlanet(2934.3, 579.286, -1366.08, 200, 50, 100, 25);
+let planetE = new outerPlanet(7716.6, 1036.74, 1654.1, 300, 50, 100, 20);
 
 function draw() {
     siderealTime = (time - 0.5) * (year + 1) / (year) - floor((time - 0.5) * (year + 1) / (year));
@@ -321,7 +325,7 @@ function draw() {
 
         stroke(45, 100, 100);
         strokeWeight(40);
-        point(celestialRadius * cos(sunEclipticPosition), 0, celestialRadius * sin(sunEclipticPosition));
+        point(celestialRadius * cos(sunEclipticPosition(time)), 0, celestialRadius * sin(sunEclipticPosition(time)));
         planetA.drawPlanet();
         planetC.drawPlanet();
         planetD.drawPlanet();
@@ -347,10 +351,13 @@ function draw() {
     }
     pop();  //end rotation of the earth
     time += speed;
-
-    sunEclipticPosition = (time % year) / year * 360;
 }
-
+function sunEclipticPosition(t) {
+    return (sv(t) + 180) % 360 - 180;
+}
+function sv(t) {
+    return 360 / year * (t - 0.5);
+}
 function updateLatitude() {
     latitude = latinput.value();
     latinput.value("");
