@@ -119,11 +119,11 @@ function setup() {
 
     speedlabel = createElement("h5", "Speed");
     speedlabel.position(windowWidth - 235, 60);
-    speedslider = createSlider(0, 10, 2, 1);
+    speedslider = createSlider(-7, 11, 2, 1);
     speedslider.position(windowWidth - 185, 80);
     speednumber = createElement("h5", "Speed: 1 spf");
     speednumber.position(windowWidth - 235, 85);
-    speedslider.style('width', '120px');
+    speedslider.style('width', '150px');
 
     h = createCheckbox("Show Horizon", true);
     h.position(windowWidth - 235, 150);
@@ -249,6 +249,10 @@ function draw() {
     if (speedslider.value() === 0) {
         speed = 0;
         speednumber.html("Speed: Paused");
+    }
+    else if (speedslider.value() < 0) {
+        speed = -1 / 86400 * pow(2, -speedslider.value() + 2);
+        speednumber.html("Speed: " + -1 * pow(2, -speedslider.value() + 2) + " spf");
     }
     latnum.html("Latitude: " + latitude + "˚");
     tiltnum.html("Axial Tilt: " + tilt + "˚");
