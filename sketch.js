@@ -76,6 +76,11 @@ function setup() {
     timenum.position(windowWidth - 235, 450);
     yearnum = createElement("h5", "Year Length: 365 days");
     yearnum.position(windowWidth - 235, 470);
+
+    sizelabel = createElement("h5", "Size");
+    sizelabel.position(windowWidth - 235, 490);
+    sizeslider = createSlider(10, 60, 10, 5);
+    sizeslider.position(windowWidth - 185, 510);
 }
 
 function preload() {
@@ -90,6 +95,7 @@ var tiltinput, tiltbutton;
 var timeinput, timebutton;
 var yearinput, yearbutton;
 var latnum, tiltnum, timenum, yearnum;
+var sizelabel, sizeslider;
 
 let time = 0.5;
 let year = 365;
@@ -99,6 +105,7 @@ let celestialRadius = 1000;
 let starList = [];
 let latitude = 35;
 let tilt = 23;
+let size = 10;
 
 let siderealTime;
 
@@ -128,6 +135,7 @@ function draw() {
     background(0);
     let fov = fovslider.value();
     fovnumber.html("FOV: " + fov + "˚");
+    size = sizeslider.value();
     speed = 1 / 86400 * pow(2, speedslider.value() - 2);
     speednumber.html("Speed: " + pow(2, speedslider.value() - 2) + " spf");
     if (speedslider.value() === 0) {
@@ -243,7 +251,7 @@ class Star {
 
     drawStar() {
         stroke(map(-this.declination, -90, 90, 0, 200), 100, 100);
-        strokeWeight(10 * sqrt(pow(pow(100, 0.2), -this.magnitude)));
+        strokeWeight(size * sqrt(pow(pow(100, 0.2), -this.magnitude)));
         let x = celestialRadius * sin(180 + this.rightAscension) * cos(this.declination);
         let y = -celestialRadius * sin(this.declination);
         let z = -celestialRadius * cos(180 + this.rightAscension) * cos(this.declination);
