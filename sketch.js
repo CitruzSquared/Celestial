@@ -86,7 +86,7 @@ function setup() {
 function preload() {
     starListtext = loadStrings("starList.txt");
 }
-
+let starListtext = [];
 var fovlabel, fovnumber, fovslider;
 var speedlabel, speednumber, speedslider;
 var h, hm, e, em, E, Em;
