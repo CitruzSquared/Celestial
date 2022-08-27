@@ -160,23 +160,23 @@ function setup() {
     timebutton.mousePressed(updateTime);
 
     latnum = createElement("h5", "Latitude: 30˚");
-    latnum.position(windowWidth - 235, 400);
+    latnum.position(windowWidth - 235, 380);
     tiltnum = createElement("h5", "Axial Tilt: 23˚");
-    tiltnum.position(windowWidth - 235, 420);
+    tiltnum.position(windowWidth - 235, 400);
     timenum = createElement("h5", "Time: 0.5 days");
-    timenum.position(windowWidth - 235, 440);
+    timenum.position(windowWidth - 235, 420);
     yearnum = createElement("h5", "Year Length: 298 days");
-    yearnum.position(windowWidth - 235, 460);
+    yearnum.position(windowWidth - 235, 440);
 
     sizelabel = createElement("h5", "Size");
-    sizelabel.position(windowWidth - 235, 480);
+    sizelabel.position(windowWidth - 235, 460);
     sizeslider = createSlider(10, 60, 20, 5);
-    sizeslider.position(windowWidth - 185, 500);
+    sizeslider.position(windowWidth - 185, 480);
 
     magnlabel = createElement("h5", "Limiting Magnitude");
-    magnlabel.position(windowWidth - 235, 500);
+    magnlabel.position(windowWidth - 235, 480);
     magnslider = createSlider(-2, 6, 4.5, 0.5);
-    magnslider.position(windowWidth - 185, 540);
+    magnslider.position(windowWidth - 185, 520);
 }
 
 function preload() {
