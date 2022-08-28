@@ -227,7 +227,8 @@ let planetD = new outerPlanet(2934.3, 579.286, -1366.08, 200, 50, 100, 25);
 let planetE = new outerPlanet(7716.6, 1036.74, 1654.1, 300, 50, 100, 20);
 
 function draw() {
-    siderealTime = (time - 0.5) * (year + 1) / (year) - floor((time - 0.5) * (year + 1) / (year));
+    day = time % year;
+    siderealTime = (day - 0.5) * (year + 1) / (year) - floor((day - 0.5) * (year + 1) / (year));
     angle = siderealTime * 360;
     showHorizon = h.checked();
     showHorizonMeridians = hm.checked();
