@@ -322,7 +322,7 @@ function draw() {
 
 
         stroke(45, 100, 100);
-        strokeWeight(40);
+        strokeWeight(45);
         point(celestialRadius * cos(sunEclipticPosition(time)), 0, celestialRadius * sin(sunEclipticPosition(time)));
         planetA.drawPlanet();
         planetC.drawPlanet();
