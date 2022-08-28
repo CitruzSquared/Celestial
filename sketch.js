@@ -322,7 +322,7 @@ function draw() {
 
 
         stroke(45, 100, 100);
-        strokeWeight(45);
+        strokeWeight(40);
         point(celestialRadius * cos(sunEclipticPosition(time)), 0, celestialRadius * sin(sunEclipticPosition(time)));
         planetA.drawPlanet();
         planetC.drawPlanet();
@@ -337,8 +337,8 @@ function draw() {
         torus(celestialRadius, 2, 40);
         rotateX(90);
         stroke(240, 50, 100);
-        strokeWeight(40);
-        point((celestialRadius - 1) * cos(sunEclipticPosition(time) + calculateMoonPosition(time)), 0, (celestialRadius - 1) * sin(sunEclipticPosition(time) + calculateMoonPosition(time)));
+        strokeWeight(45);
+        point((celestialRadius) * cos(sunEclipticPosition(time) + calculateMoonPosition(time)), 0, (celestialRadius) * sin(sunEclipticPosition(time) + calculateMoonPosition(time)));
         pop();
 
         pop();
