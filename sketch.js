@@ -218,6 +218,9 @@ let showEcliptic = true;
 let showEclipticMeridians = false;
 
 let R = 126.096;
+let lunarObliquity = 4.85;
+let moonPeriod = 22.21118012;
+let moonoffset = 69.37267080852348993;
 let planetA = new innerPlanet(169.0587391, 86.4136, 13.15, 0, 50, 100, 35);
 let planetC = new outerPlanet(543.7880553, 188.297, -60.31, 90, 50, 100, 30);
 let planetD = new outerPlanet(2934.3, 579.286, -1366.08, 200, 50, 100, 25);
@@ -325,6 +328,20 @@ function draw() {
         planetC.drawPlanet();
         planetD.drawPlanet();
         planetE.drawPlanet();
+
+        push(); //moon
+        rotateX(-90);
+        rotateY(lunarObliquity);
+        noStroke();
+        fill(240, 50, 100);
+        torus(celestialRadius, 2, 40);
+        rotateX(90);
+        stroke(240, 50, 100);
+        strokeWeight(40);
+        console.log(calculateMoonPosition(time));
+        point(celestialRadius * cos(sunEclipticPosition(time) + calculateMoonPosition(time)), 0, celestialRadius * sin(sunEclipticPosition(time) + calculateMoonPosition(time)));
+        pop();
+
         pop();
     }
     if (showEclipticMeridians) { //ecliptic meridians
@@ -353,6 +370,13 @@ function sunEclipticPosition(t) {
 function sv(t) {
     return 360 / year * (t - 0.5);
 }
+function calculateMoonPosition(t) {
+    let n = t % 24;
+    let s = 360 / moonPeriod * (n + moonoffset);
+    let m = (s + 180) % 360 - 180;
+    return (m - sunEclipticPosition(n) + 180) % 360 - 180;
+}
+
 function updateLatitude() {
     latitude = latinput.value();
     latinput.value("");
