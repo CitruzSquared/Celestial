@@ -339,7 +339,7 @@ function draw() {
         stroke(240, 50, 100);
         strokeWeight(40);
         console.log(calculateMoonPosition(time));
-        point(celestialRadius * cos(sunEclipticPosition(time) + calculateMoonPosition(time)), 0, celestialRadius * sin(sunEclipticPosition(time) + calculateMoonPosition(time)));
+        point((celestialRadius - 1) * cos(sunEclipticPosition(time) + calculateMoonPosition(time)), 0, (celestialRadius - 1) * sin(sunEclipticPosition(time) + calculateMoonPosition(time)));
         pop();
 
         pop();
