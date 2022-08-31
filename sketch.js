@@ -198,7 +198,7 @@ let time = 0.5;
 let year = 298;
 let realtime = 360 / (3600 * 24);
 let angle = 0;
-let celestialRadius = 1000;
+let celestialRadius = 2000;
 let starList = [];
 let latitude = 40.8;
 let tilt = 24.7;
@@ -256,7 +256,7 @@ function draw() {
     tiltnum.html("Axial Tilt: " + tilt + "˚");
     timenum.html("Time: " + round(time * 10000) / 10000 + " days");
     yearnum.html("Year Length: " + year + " days");
-    perspective(fov);
+    perspective(fov, width / height, -10000, 10000);
     orbitControl(-fov / 60, -fov / 60, 0);
     //equator
     if (showEquator) {
