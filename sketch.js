@@ -254,7 +254,7 @@ function draw() {
     }
     latnum.html("Latitude: " + latitude + "˚");
     tiltnum.html("Axial Tilt: " + tilt + "˚");
-    timenum.html("Time: " + round(time * 1000) / 1000 + " days");
+    timenum.html("Time: " + round(time * 10000) / 10000 + " days");
     yearnum.html("Year Length: " + year + " days");
     perspective(fov);
     orbitControl(-fov / 60, -fov / 60, 0);
