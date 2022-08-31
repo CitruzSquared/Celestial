@@ -163,7 +163,7 @@ function setup() {
     latnum.position(windowWidth - 235, 380);
     tiltnum = createElement("h5", "Axial Tilt: 23˚");
     tiltnum.position(windowWidth - 235, 400);
-    timenum = createElement("h5", "Time: 0.5000 days");
+    timenum = createElement("h5", "Time: 0, 12:00:00 (0.5000 dy)");
     timenum.position(windowWidth - 235, 420);
     yearnum = createElement("h5", "Year Length: 298 days");
     yearnum.position(windowWidth - 235, 440);
@@ -258,7 +258,7 @@ function draw() {
     let hour = floor(24 * (time - date));
     let minute = floor(60 * ((24 * (time - date)) - hour));
     let second = floor(60 * ((60 * ((24 * (time - date)) - hour)) - minute))
-    timenum.html("Time: " + time.toFixed(4) + " days | " + date + ", " + ("0" + hour).slice(-2) + ":" + ("0" + minute).slice(-2) + ":" + ("0" + second).slice(-2));
+    timenum.html("Time: " + date + ", " + ("0" + hour).slice(-2) + ":" + ("0" + minute).slice(-2) + ":" + ("0" + second).slice(-2) + " (" + time.toFixed(3) + " dy)");
     yearnum.html("Year Length: " + year + " days");
     perspective(fov, width / height, -10000, 10000);
     orbitControl(-fov / 60, -fov / 60, 0);
