@@ -221,6 +221,8 @@ let R = 126.096;
 let lunarObliquity = 4.85;
 let moonPeriod = 22.21118012;
 let moonoffset = 69.37267080852348993;
+let nodalPrecessionPerYear = 19;
+let nodalPrecessionPeriod = 360 / nodalPrecessionPerYear * 298;
 let moonSynodic = 1 / (1 / moonPeriod - 1 / year);
 let planetA = new innerPlanet(169.0587391, 86.4136, 13.15, 0, 50, 100, 35);
 let planetC = new outerPlanet(543.7880553, 188.297, -60.31, 90, 50, 100, 30);
@@ -334,13 +336,15 @@ function draw() {
         planetC.drawPlanet();
         planetD.drawPlanet();
         planetE.drawPlanet();
+        rotateX(-90);
 
         push(); //moon
-        rotateX(-90);
+        rotateZ(((time + 75) % nodalPrecessionPeriod) * 360 / nodalPrecessionPeriod);
         rotateY(lunarObliquity);
         noStroke();
         fill(240, 50, 100);
         torus(celestialRadius, 2, 40);
+        rotateZ(-((time + 75) % nodalPrecessionPeriod) * 360 / nodalPrecessionPeriod);
         rotateX(90);
         stroke(240, 50, 100);
         strokeWeight(45);
