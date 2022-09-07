@@ -119,7 +119,7 @@ function setup() {
 
     speedlabel = createElement("h5", "Speed");
     speedlabel.position(windowWidth - 235, 60);
-    speedslider = createSlider(-12, 12, 2, 1);
+    speedslider = createSlider(-16, 16, 2, 1);
     speedslider.position(windowWidth - 185, 80);
     speednumber = createElement("h5", "Speed: 1 spf");
     speednumber.position(windowWidth - 235, 85);
@@ -246,13 +246,13 @@ function draw() {
         speed = -1 / 86400 * pow(2, -speedslider.value() - 2);
         speednumber.html("Speed: " + -1 * pow(2, -speedslider.value() - 2) + " spf");
     }
-    if (speedslider.value() === 12) {
-        speed = 1;
-        speednumber.html("Speed: 1 dpf");
+    if (speedslider.value() >= 12) {
+        speed = pow(2, speedslider.value() - 12);
+        speednumber.html("Speed: " + pow(2, speedslider.value() - 12) + " dpf");
     }
-    else if (speedslider.value() === -12) {
-        speed = -1;
-        speednumber.html("Speed: -1 dpf");
+    else if (speedslider.value() <= -12) {
+        speed = -pow(2, speedslider.value() - 12);
+        speednumber.html("Speed: " + -1 * pow(2, speedslider.value() - 12) + " dpf");
     }
     latnum.html("Latitude: " + latitude + "˚");
     tiltnum.html("Axial Tilt: " + tilt + "˚");
