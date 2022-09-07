@@ -247,11 +247,11 @@ function draw() {
         speednumber.html("Speed: " + -1 * pow(2, -speedslider.value() - 2) + " spf");
     }
     if (speedslider.value() === 12) {
-        speed = 86000;
+        speed = 1;
         speednumber.html("Speed: 1 dpf");
     }
     else if (speedslider.value() === -12) {
-        speed = -86000;
+        speed = -1;
         speednumber.html("Speed: -1 dpf");
     }
     latnum.html("Latitude: " + latitude + "˚");
