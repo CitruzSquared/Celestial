@@ -211,7 +211,7 @@ let showEclipticMeridians = false;
 
 let R = 126.096;
 let lunarObliquity = 4.85;
-let moonSynodic = 24;
+let moonSynodic = 298 / (12 + 5 / 18);
 let moonPeriod = (year * moonSynodic) / (year + moonSynodic);
 let moonoffset = -(-75 / moonPeriod + 75.5 / year) * moonPeriod;
 let nodalPrecessionPerYear = 19;
