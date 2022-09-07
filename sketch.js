@@ -246,11 +246,11 @@ function draw() {
         speed = -1 / 86400 * pow(2, -speedslider.value() - 2);
         speednumber.html("Speed: " + -1 * pow(2, -speedslider.value() - 2) + " spf");
     }
-    if (speedslider.value === 12) {
+    if (speedslider.value() === 12) {
         speed = 86000;
         speednumber.html("Speed: 1 dpf");
     }
-    else if (speedslider.value === -12) {
+    else if (speedslider.value() === -12) {
         speed = -86000;
         speednumber.html("Speed: -1 dpf");
     }
