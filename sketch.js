@@ -251,8 +251,8 @@ function draw() {
         speednumber.html("Speed: " + pow(2, speedslider.value() - 12) + " dpf");
     }
     else if (speedslider.value() <= -12) {
-        speed = -pow(2, speedslider.value() - 12);
-        speednumber.html("Speed: " + -1 * pow(2, speedslider.value() - 12) + " dpf");
+        speed = -pow(2, -speedslider.value() - 12);
+        speednumber.html("Speed: " + -1 * pow(2, -speedslider.value() - 12) + " dpf");
     }
     latnum.html("Latitude: " + latitude + "˚");
     tiltnum.html("Axial Tilt: " + tilt + "˚");
