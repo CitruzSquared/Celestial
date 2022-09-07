@@ -145,13 +145,6 @@ function setup() {
     latbutton.position(latinput.x + latinput.width, 320);
     latbutton.mousePressed(updateLatitude);
 
-    tiltinput = createInput();
-    tiltinput.position(windowWidth - 235, 340);
-    tiltinput.size(80);
-    tiltbutton = createButton("Enter Axial Tilt");
-    tiltbutton.position(tiltinput.x + tiltinput.width, 340);
-    tiltbutton.mousePressed(updateTilt);
-
     timeinput = createInput();
     timeinput.position(windowWidth - 235, 360);
     timeinput.size(80);
@@ -187,7 +180,6 @@ var fovlabel, fovnumber, fovslider;
 var speedlabel, speednumber, speedslider;
 var h, hm, e, em, E, Em;
 var latinput, latbutton;
-var tiltinput, tiltbutton;
 var timeinput, timebutton;
 var yearinput, yearbutton;
 var latnum, tiltnum, timenum, yearnum;
@@ -389,11 +381,6 @@ function calculateMoonPosition(t) {
 function updateLatitude() {
     latitude = latinput.value();
     latinput.value("");
-}
-
-function updateTilt() {
-    tilt = tiltinput.value();
-    tiltinput.value("");
 }
 
 function updateTime() {
