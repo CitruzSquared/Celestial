@@ -146,30 +146,30 @@ function setup() {
     latbutton.mousePressed(updateLatitude);
 
     timeinput = createInput();
-    timeinput.position(windowWidth - 235, 360);
+    timeinput.position(windowWidth - 235, 340);
     timeinput.size(80);
     timebutton = createButton("Enter Time (days)");
-    timebutton.position(timeinput.x + timeinput.width, 360);
+    timebutton.position(timeinput.x + timeinput.width, 340);
     timebutton.mousePressed(updateTime);
 
     latnum = createElement("h5", "Latitude: 30˚");
-    latnum.position(windowWidth - 235, 380);
+    latnum.position(windowWidth - 235, 360);
     tiltnum = createElement("h5", "Axial Tilt: 23˚");
-    tiltnum.position(windowWidth - 235, 400);
+    tiltnum.position(windowWidth - 235, 380);
     timenum = createElement("h5", "Time: 0, 12:00:00 (0.5000 dy)");
-    timenum.position(windowWidth - 235, 420);
+    timenum.position(windowWidth - 235, 400);
     yearnum = createElement("h5", "Year Length: 298 days");
-    yearnum.position(windowWidth - 235, 440);
+    yearnum.position(windowWidth - 235, 420);
 
     sizelabel = createElement("h5", "Size");
-    sizelabel.position(windowWidth - 235, 460);
+    sizelabel.position(windowWidth - 235, 440);
     sizeslider = createSlider(10, 60, 20, 5);
-    sizeslider.position(windowWidth - 185, 480);
+    sizeslider.position(windowWidth - 185, 460);
 
     magnlabel = createElement("h5", "Limiting Magnitude");
-    magnlabel.position(windowWidth - 235, 480);
+    magnlabel.position(windowWidth - 235, 460);
     magnslider = createSlider(-2, 6, 4.5, 0.5);
-    magnslider.position(windowWidth - 185, 520);
+    magnslider.position(windowWidth - 185, 500);
 }
 
 function preload() {
