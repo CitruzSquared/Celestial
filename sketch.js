@@ -113,7 +113,7 @@ function setup() {
     fovlabel.position(windowWidth - 235, -5);
     fovnumber = createElement("h5", "FOV: " + 60 + "˚");
     fovnumber.position(windowWidth - 235, 20);
-    fovslider = createSlider(5, 100, 60, 5);
+    fovslider = createSlider(10, 180, 100, 5);
     fovslider.position(windowWidth - 160, 15);
     fovslider.style('width', '120px');
 
@@ -262,8 +262,8 @@ function draw() {
     let second = floor(60 * ((60 * ((24 * (time - date)) - hour)) - minute))
     timenum.html("Time: " + date + ", " + ("0" + hour).slice(-2) + ":" + ("0" + minute).slice(-2) + ":" + ("0" + second).slice(-2) + " (" + time.toFixed(3) + " dy)");
     yearnum.html("Year Length: " + year + " days");
-    perspective(fov, width / height, -10000, 10000);
-    orbitControl(-fov / 60, -fov / 60, 0);
+    perspective(fov * height / width, width / height, -10000, 10000);
+    orbitControl(-fov / 100, -fov / 100, 0);
     //equator
     if (showEquator) {
         push();
