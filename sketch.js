@@ -119,7 +119,7 @@ function setup() {
 
     speedlabel = createElement("h5", "Speed");
     speedlabel.position(windowWidth - 235, 60);
-    speedslider = createSlider(-16, 16, 2, 1);
+    speedslider = createSlider(-12, 12, 2, 1);
     speedslider.position(windowWidth - 185, 80);
     speednumber = createElement("h5", "Speed: 1 spf");
     speednumber.position(windowWidth - 235, 85);
