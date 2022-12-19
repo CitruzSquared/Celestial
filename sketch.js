@@ -175,6 +175,7 @@ function setup() {
 function preload() {
     starListtext = loadStrings("starList.txt");
 }
+
 let starListtext = [];
 var fovlabel, fovnumber, fovslider;
 var speedlabel, speednumber, speedslider;
@@ -213,7 +214,7 @@ let R = 126.096;
 let lunarObliquity = 4.85;
 let moonSynodic = 298 / (12 + 5 / 18);
 let moonPeriod = (year * moonSynodic) / (year + moonSynodic);
-let moonoffset = -(-75 / moonPeriod + 75.5 / year) * moonPeriod;
+let moonoffset = -(-76 / moonPeriod + 76 / year) * moonPeriod;
 let nodalPrecessionPerYear = 15.434547959;
 let nodalPrecessionPeriod = 360 / nodalPrecessionPerYear * 298;
 let planetA = new innerPlanet(169.0587391, 86.4136, 13.15, 0, 50, 100, 35);
@@ -377,7 +378,7 @@ function sunEclipticPosition(t) {
     return (sv(t) + 180) % 360 - 180;
 }
 function sv(t) {
-    return 360 / year * (t - 0.5);
+    return 360 / year * (t);
 }
 function calculateMoonPosition(t) {
     let n = t % moonSynodic;
