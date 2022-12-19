@@ -340,12 +340,12 @@ function draw() {
         rotateX(-90);
 
         push(); //moon
-        rotateZ(((time + 75) % nodalPrecessionPeriod) * 360 / nodalPrecessionPeriod);
+        rotateZ((((time + 78) % nodalPrecessionPeriod) + 2.5 / 298 * nodalPrecessionPeriod) * 360 / nodalPrecessionPeriod);
         rotateY(lunarObliquity);
         noStroke();
         fill(240, 50, 100);
         torus(celestialRadius, 2, 40);
-        rotateZ(-((time + 75) % nodalPrecessionPeriod) * 360 / nodalPrecessionPeriod);
+        rotateZ(-(((time + 78) % nodalPrecessionPeriod) + 2.5 / 298 * nodalPrecessionPeriod) * 360 / nodalPrecessionPeriod);
         rotateX(90);
         stroke(240, 50, 100);
         strokeWeight(45);
