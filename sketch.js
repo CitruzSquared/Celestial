@@ -359,21 +359,23 @@ function draw() {
         fill(240, 50, 100);
         let moonPos = (calculateMoonPosition(time) + sunEclipticPosition(time) + 180) % 360 - 180;
         let moonfull = (calculateMoonPosition(time) + 180) % 360 - 180;
-        let diff1 = abs((moonPos - calculateNodePosition(time) + 180) % (360) - 180);
-        let diff2 = abs((moonPos - calculateNodePosition(time) + 180 + 180) % (360) - 180);
+        let diff1 = abs((moonPos - calculateNodePosition(time))) % 360;
+        let diff2 = abs((moonPos - calculateNodePosition(time)) + 180) % 360;
+        let diff3 = abs(360 - abs((moonPos - calculateNodePosition(time))) % 360);
+        let diff4 = abs(360 - abs(((moonPos - calculateNodePosition(time)) + 180)) % 360);
         let fullness1 = abs((moonfull - 180));
         let fullness2 = abs((moonfull + 180));
         torus(celestialRadius, 2, 40);
         rotateZ(-(((time + 78) % nodalPrecessionPeriod) + nodalPrecessionOffset) * 360 / nodalPrecessionPeriod);
         rotateX(90);
         stroke(240, 50, 100);
-        if ((diff1 <= umbral || diff2 <= umbral) && (fullness1 <= umbral || fullness2 <= umbral)) {
+        if ((diff1 <= umbral || diff2 <= umbral || diff3 <= umbral || diff4 <= umbral) && (fullness1 <= umbral || fullness2 <= umbral)) {
             stroke(0, 80, 80);
         }
-        else if ((diff1 <= partial || diff2 <= partial) && (fullness1 <= partial || fullness2 <= partial)) {
+        else if ((diff1 <= partial || diff2 <= partial || diff3 <= partial || diff4 <= partial) && (fullness1 <= partial || fullness2 <= partial)) {
             stroke(0, 50, 60);
         }
-        else if ((diff1 <= penumbral || diff2 <= penumbral) && (fullness1 <= penumbral || fullness2 <= penumbral)) {
+        else if ((diff1 <= penumbral || diff2 <= penumbral || diff3 <= penumbral || diff4 <= penumbral) && (fullness1 <= penumbral || fullness2 <= penumbral)) {
             stroke(0, 0, 60);
         }
         else if ((fullness1 <= 7.5 || fullness2 <= 7.5)) {
