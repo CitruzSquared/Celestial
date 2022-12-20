@@ -109,6 +109,7 @@ function setup() {
     }
     camera = createCamera();
 
+
     fovlabel = createElement("h5", "FOV Level");
     fovlabel.position(windowWidth - 235, -5);
     fovnumber = createElement("h5", "FOV: " + 60 + "˚");
@@ -175,7 +176,6 @@ function setup() {
 function preload() {
     starListtext = loadStrings("starList.txt");
 }
-
 let starListtext = [];
 var fovlabel, fovnumber, fovslider;
 var speedlabel, speednumber, speedslider;
@@ -211,16 +211,29 @@ let showEcliptic = true;
 let showEclipticMeridians = false;
 
 let R = 126.096;
-let lunarObliquity = 4.85;
+let lunarObliquity = 4.92;
 let moonSynodic = 298 / (12 + 5 / 18);
 let moonPeriod = (year * moonSynodic) / (year + moonSynodic);
 let moonoffset = -(-78 / moonPeriod + 78 / year) * moonPeriod;
 let nodalPrecessionPerYear = 15.434547959;
 let nodalPrecessionPeriod = 360 / nodalPrecessionPerYear * 298;
+let nodalPrecessionOffset = 81.635043886;
 let planetA = new innerPlanet(169.0587391, 86.4136, 13.15, 0, 50, 100, 35);
 let planetC = new outerPlanet(543.7880553, 188.297, -60.31, 90, 50, 100, 30);
 let planetD = new outerPlanet(2934.3, 579.286, -1366.08, 200, 50, 100, 25);
 let planetE = new outerPlanet(7716.6, 1036.74, 1654.1, 300, 50, 100, 20);
+
+let moonRadius = 2260.113;
+let earthRadius = 5512;
+let sunRadius = 673320;
+let moonDistance = 294000.241;
+let sunDistance = 126096000;
+let moonAngularRad = Math.atan(moonRadius / moonDistance);
+let earthUmbra = Math.atan((sunRadius - (sunRadius - earthRadius) * (sunDistance + moonDistance) / sunDistance) / moonDistance);
+let earthPenumbra = Math.atan(((sunRadius + earthRadius) * (sunDistance + moonDistance) / sunDistance - sunRadius) / moonDistance)
+let umbral = Math.abs((earthUmbra - moonAngularRad) / (Math.tan(lunarObliquity * Math.PI / 180))) * 180 / Math.PI;
+let partial = (moonAngularRad + earthUmbra) * 1 / (Math.tan(lunarObliquity * Math.PI / 180)) * 180 / Math.PI;
+let penumbral = (moonAngularRad + earthPenumbra) * 1 / (Math.tan(lunarObliquity * Math.PI / 180)) * 180 / Math.PI;
 
 function draw() {
     day = time % year;
@@ -340,14 +353,32 @@ function draw() {
         rotateX(-90);
 
         push(); //moon
-        rotateZ((((time + 78) % nodalPrecessionPeriod) + 2.5 / 298 * nodalPrecessionPeriod) * 360 / nodalPrecessionPeriod);
+        rotateZ((((time + 78) % nodalPrecessionPeriod) + nodalPrecessionOffset) * 360 / nodalPrecessionPeriod);
         rotateY(lunarObliquity);
         noStroke();
         fill(240, 50, 100);
+        let moonPos = (calculateMoonPosition(time) + sunEclipticPosition(time) + 180) % 360 - 180;
+        let moonfull = (calculateMoonPosition(time) + 180) % 360 - 180;
+        let diff1 = abs((moonPos - calculateNodePosition(time) + 180) % (360) - 180);
+        let diff2 = abs((moonPos - calculateNodePosition(time) + 180 + 180) % (360) - 180);
+        let fullness1 = abs((moonfull - 180));
+        let fullness2 = abs((moonfull + 180));
         torus(celestialRadius, 2, 40);
-        rotateZ(-(((time + 78) % nodalPrecessionPeriod) + 2.5 / 298 * nodalPrecessionPeriod) * 360 / nodalPrecessionPeriod);
+        rotateZ(-(((time + 78) % nodalPrecessionPeriod) + nodalPrecessionOffset) * 360 / nodalPrecessionPeriod);
         rotateX(90);
         stroke(240, 50, 100);
+        if ((diff1 <= umbral || diff2 <= umbral) && (fullness1 <= umbral || fullness2 <= umbral)) {
+            stroke(0, 80, 80);
+        }
+        else if ((diff1 <= partial || diff2 <= partial) && (fullness1 <= partial || fullness2 <= partial)) {
+            stroke(0, 50, 60);
+        }
+        else if ((diff1 <= penumbral || diff2 <= penumbral) && (fullness1 <= penumbral || fullness2 <= penumbral)) {
+            stroke(0, 0, 60);
+        }
+        else if ((fullness1 <= 7.5 || fullness2 <= 7.5)) {
+            stroke(50, 50, 100);
+        }
         strokeWeight(45);
         point((celestialRadius) * cos(sunEclipticPosition(time) + calculateMoonPosition(time)), 0, (celestialRadius) * sin(sunEclipticPosition(time) + calculateMoonPosition(time)));
         pop();
@@ -385,6 +416,11 @@ function calculateMoonPosition(t) {
     let s = 360 / moonPeriod * (n + moonoffset);
     let m = (s + 180) % 360 - 180;
     return (m - sunEclipticPosition(n) + 180) % 360 - 180;
+}
+
+function calculateNodePosition(t) {
+    let node = (((time + 78) % nodalPrecessionPeriod) + nodalPrecessionOffset) * 360 / nodalPrecessionPeriod + 90;
+    return -((node + 180) % 360 - 180);
 }
 
 function updateLatitude() {
