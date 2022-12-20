@@ -109,7 +109,6 @@ function setup() {
     }
     camera = createCamera();
 
-
     fovlabel = createElement("h5", "FOV Level");
     fovlabel.position(windowWidth - 235, -5);
     fovnumber = createElement("h5", "FOV: " + 60 + "˚");
@@ -369,18 +368,19 @@ function draw() {
         rotateZ(-(((time + 78) % nodalPrecessionPeriod) + nodalPrecessionOffset) * 360 / nodalPrecessionPeriod);
         rotateX(90);
         stroke(240, 50, 100);
-        if ((diff1 <= umbral || diff2 <= umbral || diff3 <= umbral || diff4 <= umbral) && (fullness1 <= umbral || fullness2 <= umbral)) {
+        if ((diff1 <= umbral || diff2 <= umbral || diff3 <= umbral || diff4 <= umbral) && (fullness1 <= earthUmbra * 180 / PI || fullness2 <= earthUmbra * 180 / PI)) {
             stroke(0, 80, 80);
         }
-        else if ((diff1 <= partial || diff2 <= partial || diff3 <= partial || diff4 <= partial) && (fullness1 <= partial || fullness2 <= partial)) {
+        else if ((diff1 <= partial || diff2 <= partial || diff3 <= partial || diff4 <= partial) && (fullness1 <= (earthUmbra + moonAngularRad) * 180 / PI || fullness2 <= (earthUmbra + moonAngularRad) * 180 / PI)) {
             stroke(0, 50, 60);
         }
-        else if ((diff1 <= penumbral || diff2 <= penumbral || diff3 <= penumbral || diff4 <= penumbral) && (fullness1 <= penumbral || fullness2 <= penumbral)) {
+        else if ((diff1 <= penumbral || diff2 <= penumbral || diff3 <= penumbral || diff4 <= penumbral) && (fullness1 <= earthPenumbra * 180 / PI || fullness2 <= earthPenumbra * 180 / PI)) {
             stroke(0, 0, 60);
         }
         else if ((fullness1 <= 7.5 || fullness2 <= 7.5)) {
             stroke(50, 50, 100);
         }
+        console.log(penumbral)
         strokeWeight(45);
         point((celestialRadius) * cos(sunEclipticPosition(time) + calculateMoonPosition(time)), 0, (celestialRadius) * sin(sunEclipticPosition(time) + calculateMoonPosition(time)));
         pop();
