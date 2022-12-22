@@ -236,8 +236,8 @@ let penumbral = (moonAngularRad + earthPenumbra) * 1 / (Math.tan(lunarObliquity 
 
 function draw() {
     day = time % year;
-    siderealTime = (day - 0.5) * (year + 1) / (year) - floor((day - 0.5) * (year + 1) / (year));
-    angle = siderealTime * 360;
+    siderealTime = (day) * (year + 1) / (year) - floor((day) * (year + 1) / (year));
+    angle = siderealTime * 360 + 180;
     showHorizon = h.checked();
     showHorizonMeridians = hm.checked();
     showEquator = e.checked();
