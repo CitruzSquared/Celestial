@@ -230,9 +230,9 @@ let sunDistance = 126096000;
 let moonAngularRad = Math.atan(moonRadius / moonDistance);
 let earthUmbra = Math.atan((sunRadius - (sunRadius - earthRadius) * (sunDistance + moonDistance) / sunDistance) / moonDistance);
 let earthPenumbra = Math.atan(((sunRadius + earthRadius) * (sunDistance + moonDistance) / sunDistance - sunRadius) / moonDistance)
-let umbral = Math.abs((earthUmbra - moonAngularRad) / (Math.tan(lunarObliquity * Math.PI / 180))) * 180 / Math.PI;
-let partial = (moonAngularRad + earthUmbra) * 1 / (Math.tan(lunarObliquity * Math.PI / 180)) * 180 / Math.PI;
-let penumbral = (moonAngularRad + earthPenumbra) * 1 / (Math.tan(lunarObliquity * Math.PI / 180)) * 180 / Math.PI;
+let umbral = Math.abs((earthUmbra - moonAngularRad)) * 180 / Math.PI;
+let partial = (moonAngularRad + earthUmbra) * 180 / Math.PI;
+let penumbral = (moonAngularRad + earthPenumbra) * 180 / Math.PI;
 
 function draw() {
     day = time % year;
@@ -358,29 +358,31 @@ function draw() {
         fill(240, 50, 100);
         let moonPos = (calculateMoonPosition(time) + sunEclipticPosition(time) + 180) % 360 - 180;
         let moonfull = (calculateMoonPosition(time) + 180) % 360 - 180;
-        let diff1 = abs((moonPos - calculateNodePosition(time))) % 360;
-        let diff2 = abs((moonPos - calculateNodePosition(time)) + 180) % 360;
-        let diff3 = abs(360 - abs((moonPos - calculateNodePosition(time))) % 360);
-        let diff4 = abs(360 - abs(((moonPos - calculateNodePosition(time)) + 180)) % 360);
-        let fullness1 = abs((moonfull - 180));
-        let fullness2 = abs((moonfull + 180));
+        let diff1 = min(abs((moonPos - calculateNodePosition(time))) % 360, abs(360 - abs((moonPos - calculateNodePosition(time))) % 360)); //ascending
+
+        let shadowPos = (sunEclipticPosition(time) + 180 + 180) % 360 - 180
+        let fullness = min(abs((moonfull - 180)), abs((moonfull + 180)));
+
+        let deltaLongitude = (abs(moonPos - shadowPos) % 360);
+        let moonLatitude = asin(sin(lunarObliquity) * sin(diff1));
+        let distance = abs((acos(cos(moonLatitude) * cos(deltaLongitude)) + 180) % 360 - 180)
+
         torus(celestialRadius, 2, 40);
         rotateZ(-(((time + 78) % nodalPrecessionPeriod) + nodalPrecessionOffset) * 360 / nodalPrecessionPeriod);
         rotateX(90);
         stroke(240, 50, 100);
-        if ((diff1 <= umbral || diff2 <= umbral || diff3 <= umbral || diff4 <= umbral) && (fullness1 <= earthUmbra * 180 / PI || fullness2 <= earthUmbra * 180 / PI)) {
+        if (distance < umbral) {
             stroke(0, 80, 80);
         }
-        else if ((diff1 <= partial || diff2 <= partial || diff3 <= partial || diff4 <= partial) && (fullness1 <= (earthUmbra + moonAngularRad) * 180 / PI || fullness2 <= (earthUmbra + moonAngularRad) * 180 / PI)) {
+        else if (distance < partial) {
             stroke(0, 50, 60);
         }
-        else if ((diff1 <= penumbral || diff2 <= penumbral || diff3 <= penumbral || diff4 <= penumbral) && (fullness1 <= earthPenumbra * 180 / PI || fullness2 <= earthPenumbra * 180 / PI)) {
+        else if (distance < penumbral) {
             stroke(0, 0, 60);
         }
-        else if ((fullness1 <= 7.5 || fullness2 <= 7.5)) {
+        else if (fullness <= 7.5) {
             stroke(50, 50, 100);
         }
-        console.log(penumbral)
         strokeWeight(45);
         point((celestialRadius) * cos(sunEclipticPosition(time) + calculateMoonPosition(time)), 0, (celestialRadius) * sin(sunEclipticPosition(time) + calculateMoonPosition(time)));
         pop();
