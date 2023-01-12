@@ -234,6 +234,22 @@ let umbral = Math.abs((earthUmbra - moonAngularRad)) * 180 / Math.PI;
 let partial = (moonAngularRad + earthUmbra) * 180 / Math.PI;
 let penumbral = (moonAngularRad + earthPenumbra) * 180 / Math.PI;
 
+let comet_semi_major = 2088.58;
+let comet_time_offset = 147;
+let comet_period = 20088.1975777;
+let eccentricity = 0.95;
+
+let LON = 265.52 * Math.PI / 180;
+let AOP = 67.413 * Math.PI / 180;
+let inc = 51.721 * Math.PI / 180;
+
+let matrix_1 = Math.cos(LON) * Math.cos(AOP) - Math.sin(LON) * Math.cos(inc) * Math.sin(AOP);
+let matrix_2 = -Math.cos(LON) * Math.sin(AOP) - Math.sin(LON) * Math.cos(inc) * Math.cos(AOP);
+let matrix_3 = Math.sin(LON) * Math.cos(AOP) + Math.cos(LON) * Math.cos(inc) * Math.sin(AOP);
+let matrix_4 = -Math.sin(LON) * Math.sin(AOP) + Math.cos(LON) * Math.cos(inc) * Math.cos(AOP);
+let matrix_5 = Math.sin(inc) * Math.sin(AOP);
+let matrix_6 = Math.sin(inc) * Math.cos(AOP);
+
 function draw() {
     day = time % year;
     siderealTime = (day) * (year + 1) / (year) - floor((day) * (year + 1) / (year));
@@ -349,6 +365,33 @@ function draw() {
         planetC.drawPlanet();
         planetD.drawPlanet();
         planetE.drawPlanet();
+
+        //comet
+        stroke(220, 100, 60);
+        strokeWeight(20);
+        let comet_coords = comet_perifocal(time);
+        let comet_ecliptic_coords = comet_ecliptic([comet_coords[0], comet_coords[1]]);
+        let earth_ecliptic_coords = earth_ecliptic(time);
+        let comet_x = -comet_ecliptic_coords[0] + earth_ecliptic_coords[0];
+        let comet_y = -comet_ecliptic_coords[1] + earth_ecliptic_coords[1];
+        let comet_z = -comet_ecliptic_coords[2];
+        let dist = sqrt(comet_x * comet_x + comet_y * comet_y + comet_z * comet_z);
+        console.log(dist);
+        let coma = 6000;
+        let albedo = 0.04;
+        if (comet_coords[2] < (R * 3)) {
+            coma = (2500000 * ((R * 3) - comet_coords[2]) + 6000 * (comet_coords[2] - 104)) / ((R * 3) - 104);
+            albedo = (0.3 * ((R * 3) - comet_coords[2]) + 0.04 * (comet_coords[2] - 104)) / ((R * 3) - 104);
+        }
+        let brightness = -2.5 * Math.log10((2.5115508e26) / (4 * PI * (comet_coords[2] * 1e9) * (comet_coords[2] * 1e9)) * albedo * (PI * (coma) * (coma)) / (4 * PI * (dist * 1e9) * (dist * 1e9)) / (2.518e-8));
+        if (brightness < 5.5) {
+            stroke(50, 20, 100);
+        }
+        console.log("Mag: " + brightness);
+        comet_x = comet_x / dist * celestialRadius;
+        comet_y = comet_y / dist * celestialRadius;
+        comet_z = comet_z / dist * celestialRadius;
+        point(comet_x, comet_z, comet_y);
         rotateX(-90);
 
         push(); //moon
@@ -413,7 +456,7 @@ function sunEclipticPosition(t) {
     return (sv(t) + 180) % 360 - 180;
 }
 function sv(t) {
-    return 360 / year * (t);
+    return 360 / year * (t % year);
 }
 function calculateMoonPosition(t) {
     let n = t % moonSynodic;
@@ -423,7 +466,7 @@ function calculateMoonPosition(t) {
 }
 
 function calculateNodePosition(t) {
-    let node = (((time + 78) % nodalPrecessionPeriod) + nodalPrecessionOffset) * 360 / nodalPrecessionPeriod + 90;
+    let node = (((t + 78) % nodalPrecessionPeriod) + nodalPrecessionOffset) * 360 / nodalPrecessionPeriod + 90;
     return -((node + 180) % 360 - 180);
 }
 
@@ -437,4 +480,32 @@ function updateTime() {
     time = x - 1;
     time++;
     timeinput.value("");
+}
+function comet_perifocal(t) {
+    let n = (t - comet_time_offset) % comet_period;
+    let mean_anomaly = (2 * Math.PI) / comet_period * n;
+    let eccentric_anomaly = calc_eccentric_anomaly(mean_anomaly, mean_anomaly);
+    eccentric_anomaly = calc_eccentric_anomaly(eccentric_anomaly, mean_anomaly);
+    eccentric_anomaly = calc_eccentric_anomaly(eccentric_anomaly, mean_anomaly);
+    eccentric_anomaly = calc_eccentric_anomaly(eccentric_anomaly, mean_anomaly);
+    let P = Math.tan(eccentric_anomaly / 2) * Math.sqrt((1 + eccentricity) / (1 - eccentricity));
+    let true_anomaly = 2 * Math.atan(P);
+    let comet_distance = comet_semi_major * (1 - eccentricity * Math.cos(eccentric_anomaly));
+    return [comet_distance * Math.cos(true_anomaly), comet_distance * Math.sin(true_anomaly), comet_distance]
+}
+
+function comet_ecliptic(arr) {
+    let x = matrix_1 * arr[0] + matrix_2 * arr[1];
+    let y = matrix_3 * arr[0] + matrix_4 * arr[1];
+    let z = matrix_5 * arr[0] + matrix_6 * arr[1];
+    return [x, y, z]
+}
+
+function earth_ecliptic(t) {
+    let s = sv(t) * Math.PI / 180;
+    return [R * Math.cos(s), R * Math.sin(s), 0]
+}
+
+function calc_eccentric_anomaly(E, M) {
+    return E - (E - eccentricity * Math.sin(E) - M) / (1 - eccentricity * Math.cos(E));
 }
