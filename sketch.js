@@ -377,15 +377,14 @@ function draw() {
         let comet_z = -comet_ecliptic_coords[2];
         let dist = sqrt(comet_x * comet_x + comet_y * comet_y + comet_z * comet_z);
         console.log(dist);
-        let coma = 6000;
-        let albedo = 0.04;
-        if (comet_coords[2] < (R * 3)) {
-            coma = (2500000 * ((R * 3) - comet_coords[2]) + 6000 * (comet_coords[2] - 104)) / ((R * 3) - 104);
-            albedo = (0.3 * ((R * 3) - comet_coords[2]) + 0.04 * (comet_coords[2] - 104)) / ((R * 3) - 104);
-        }
-        let brightness = -2.5 * Math.log10((2.5115508e26) / (4 * PI * (comet_coords[2] * 1e9) * (comet_coords[2] * 1e9)) * albedo * (PI * (coma) * (coma)) / (4 * PI * (dist * 1e9) * (dist * 1e9)) / (2.518e-8));
-        if (brightness < 5.5) {
+        let M = 0;
+        let K = 4;
+        let brightness = M + 2.5 * K * Math.log10(comet_coords[2] / R) + 5 * Math.log10(dist / R);
+        if (brightness < 2) {
             stroke(50, 20, 100);
+        }
+        else if (brightness < 6.5) {
+            stroke(50, 30, 60);
         }
         console.log("Mag: " + brightness);
         comet_x = comet_x / dist * celestialRadius;
