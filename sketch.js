@@ -501,7 +501,7 @@ function comet_ecliptic(arr) {
 }
 
 function earth_ecliptic(t) {
-    let s = (sv(t) + Math.PI) * Math.PI / 180;
+    let s = (sv(t) + 180) * Math.PI / 180;
     return [R * Math.cos(s), R * Math.sin(s), 0]
 }
 
