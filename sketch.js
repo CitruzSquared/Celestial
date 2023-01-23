@@ -372,9 +372,9 @@ function draw() {
         let comet_coords = comet_perifocal(time);
         let comet_ecliptic_coords = comet_ecliptic([comet_coords[0], comet_coords[1]]);
         let earth_ecliptic_coords = earth_ecliptic(time);
-        let comet_x = -comet_ecliptic_coords[0] + earth_ecliptic_coords[0];
-        let comet_y = -comet_ecliptic_coords[1] + earth_ecliptic_coords[1];
-        let comet_z = -comet_ecliptic_coords[2];
+        let comet_x = comet_ecliptic_coords[0] - earth_ecliptic_coords[0];
+        let comet_y = comet_ecliptic_coords[1] - earth_ecliptic_coords[1];
+        let comet_z = comet_ecliptic_coords[2];
         let dist = sqrt(comet_x * comet_x + comet_y * comet_y + comet_z * comet_z);
         console.log(dist);
         let M = 0;
@@ -501,7 +501,7 @@ function comet_ecliptic(arr) {
 }
 
 function earth_ecliptic(t) {
-    let s = sv(t) * Math.PI / 180;
+    let s = (sv(t) + Math.PI) * Math.PI / 180;
     return [R * Math.cos(s), R * Math.sin(s), 0]
 }
 
